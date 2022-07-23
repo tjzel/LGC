@@ -1,6 +1,6 @@
-#include "types.h"
+#include "types.hpp"
 #include <iostream>
-#include "Background.h"
+#include "Background.hpp"
 
 void Background::simplify(){
   min = 0;

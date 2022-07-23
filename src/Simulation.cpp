@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ctime>
-#include "types.h"
-#include "Background.h"
+#include "types.hpp"
+#include "Background.hpp"
 
 class Simulation{
   const uchar rule;
@@ -57,23 +57,22 @@ public:
     }
   }
 
-  Background findBackground(){
+  Background findBackground(const ushort row){
     bool left[MAX_SIZE];
     bool middle[MAX_SIZE];
     bool right[MAX_SIZE];
-    ushort lastRow = length-1;
     for(int len=4; len<width/4; ++len) {
       ushort endPos = lineEnd-2*len;
       for(int pos = lineStart; pos<endPos; ++pos) {
         bool backgroundPresent = true;
         for(int i=0; i<len; ++i){
-          left[i] = cell[lastRow][pos+i];
-          middle[i] = cell[lastRow][pos+len+i];
-          right[i] = cell[lastRow][pos+2*len+i];
+          left[i] = cell[row][pos+i];
+          middle[i] = cell[row][pos+len+i];
+          right[i] = cell[row][pos+2*len+i];
         }
         for(int iter=0; iter<len; ++iter){
-          if(cell[lastRow][pos+iter]!=cell[lastRow][pos+len+iter] ||
-          cell[lastRow][pos+iter]!=cell[lastRow][pos+2*len+iter]){
+          if(cell[row][pos+iter]!=cell[row][pos+len+iter] ||
+          cell[row][pos+iter]!=cell[row][pos+2*len+iter]){
             backgroundPresent = false;
             break;
           }
@@ -115,7 +114,7 @@ public:
     int bg_iter=0;
     while(pos < realLineEnd){
       cell[0][pos++] = bg.cell[bg_iter++];
-      if(bg_iter>bg.length) bg_iter = 0;
+      if(bg_iter==bg.length) bg_iter = 0;
     }
     pos = lineStart - 1;
     int realLineStart = lineStart - width;
@@ -133,7 +132,7 @@ public:
       clear();
       randomize();
       evolve();
-      bg = findBackground();
+      bg = findBackground(length-1);
       std::cout << ctr++ << "\n";
     } while(bg.length == 0);
     print();

@@ -1,11 +1,15 @@
+#include "Background.cpp"
 #include "Simulation.cpp"
-//#include "Background.cpp"
 #include <cstdio>
 #include <iostream>
 
 int main(int argv, char* argc[]){
   int length = 64;
   int width = 64;
+  if(argv < 2){
+    std::cout << "Forgot to select a rule!\n";
+    return 1;
+  }
   int rule = atoi(argc[1]);
   /*for(int i=0; i<128; ++i){
     Simulation simulation(i, width, length);
@@ -30,4 +34,5 @@ int main(int argv, char* argc[]){
   //background.print();
   //background.simplify();
   //background.print();
+  return 0;
 }

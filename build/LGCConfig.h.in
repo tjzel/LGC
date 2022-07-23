@@ -1,0 +1,3 @@
+// the configured options and settings for LGC
+#define LGC_VERSION_MAJOR @LGC_VERSION_MAJOR@
+#define LGC_VERSION_MINOR @LGC_VERSION_MINOR@

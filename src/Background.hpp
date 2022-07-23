@@ -1,4 +1,6 @@
-#include"types.h"
+#ifndef BACKGROUND_CLASS
+#define BACKGROUND_CLASS
+#include "types.hpp"
 
 class Background{
 public:
@@ -15,3 +17,5 @@ public:
 
   friend class Simulation;
 };
+
+#endif
