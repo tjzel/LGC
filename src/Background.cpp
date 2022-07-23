@@ -11,8 +11,7 @@ void Background::simplify(){
     min += base*cell[i];
     min_cell[i] = cell[i];
     base*=2;
-  } std::cout<<"min: " << min << "\n";
-  for(int i=1; i<length; ++i) {
+  } for(int i=1; i<length; ++i) {
     int current = 0;
     base = 1;
     for(int j=length-1; j>-1; --j) {
@@ -35,11 +34,6 @@ Background::Background(void){
 Background::Background(const ushort length, bool* cell){
   this->length = length;
   for(int i=0; i<length; ++i) this->cell[i] = cell[i];
-  std::cout<<"length: "<<length << "\n";
-  for(int i=0; i<length; ++i){
-    if(cell[i]) std::cout<<"X";
-    else std::cout<<"o";
-  } std::cout<<"\n";
   simplify();
 }
 

@@ -1,10 +1,9 @@
 #ifndef BACKGROUND_CLASS
 #define BACKGROUND_CLASS
 #include "types.hpp"
+#include "Parameters.hpp"
 
-class Background{
-public:
-  ushort length;
+class Background:public Parameters{
   int min;
   bool cell[MAX_SIZE];
 
@@ -13,7 +12,6 @@ public:
   Background(const ushort, bool*);
   Background& operator=(const Background&);
   void print(void);
-
 
   friend class Simulation;
 };
