@@ -26,12 +26,12 @@ public:
   Background findBackground(const ushort);
   void parseBackground(const Background);
   bool confirmBackground(Background);
-  void findParseEvolve(void);
+  Background findParseEvolve(void);
+  void findGlider(const Background);
 
   void print(void);
 
   Simulation(const uchar);
-
   Simulation(const uchar, const ushort, const ushort);
 
 };

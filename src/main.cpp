@@ -12,6 +12,7 @@ int main(int argv, char* argc[]){
   }
   int rule = atoi(argc[1]);
   Simulation sim(rule, width, length);
-  sim.findParseEvolve();
+  Background bg = sim.findParseEvolve();
+  sim.findGlider(bg);
   return 0;
 }

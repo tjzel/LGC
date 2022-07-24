@@ -37,6 +37,11 @@ Background::Background(const ushort length, bool* cell){
   simplify();
 }
 
+Background::Background(const Background& bg){
+  length = bg.length;
+  for(int i=0; i<length; ++i) cell[i] = bg.cell[i];
+}
+
 Background& Background::operator=(const Background& bg){
   length = bg.length;
   for(int i=0; i<length; ++i) cell[i] = bg.cell[i];

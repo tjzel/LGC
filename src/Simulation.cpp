@@ -139,23 +139,42 @@ void Simulation::parseBackground(const Background bg){
   }
 }
 
-void Simulation::findParseEvolve(void){
+Background Simulation::findParseEvolve(void){
   srand(time(NULL));
   Background bg;
   int ctr = 0;
-  do{
-    clear();
-    randomize();
+  bool bgConfirmed = false;
+  while(!bgConfirmed){
+    do{
+      clear();
+      randomize();
+      evolve();
+      bg = findBackground(length-1);
+      std::cout << ctr++ << "\n";
+      if(ctr > 100000){
+        std::cout << "Too many attempts!\n";
+        return bg;
+      }
+    } while(bg.length == 0);
+    parseBackground(bg);
     evolve();
-    bg = findBackground(length-1);
-    std::cout << ctr++ << "\n";
-  } while(bg.length == 0);
-  parseBackground(bg);
-  evolve();
-  if(confirmBackground(bg)){
-    std::cout << "Background confirmed!\n";
-  } else std::cout << "False background\n";
+    bgConfirmed = confirmBackground(bg);
+  } std::cout << "Background confirmed!\n";
   print();
+  return bg;
+}
+
+void Simulation::findGlider(const Background bg){
+  if(bg.length == 0){
+    std::cout<<"Background not valid!\n";
+    return;
+  } parseBackground(bg);
+  for(int i=0; i<bg.length; ++i){
+    complement((width-bg.length)/2+i);
+    evolve();
+    print();
+    complement((width-bg.length)/2+i);
+  }
 }
 
 void Simulation::print(void){
@@ -166,7 +185,7 @@ void Simulation::print(void){
       if(cell[row][col]) std::cout<<"X";
       else std::cout<<"-";
     } std::cout<<"\n";
-  } for(int i=0; i<width; ++i) std::cout<<"="; 
+  } for(int i=0; i<width; ++i) std::cout<<"=";
   std::cout<<std::endl;
 }
 

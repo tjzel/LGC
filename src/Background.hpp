@@ -8,9 +8,13 @@ class Background:public Parameters{
   bool cell[MAX_SIZE];
 
   void simplify(void);
+
+public:
   Background(void);
   Background(const ushort, bool*);
+  Background(const Background&);
   Background& operator=(const Background&);
+
   void print(void);
 
   friend class Simulation;
