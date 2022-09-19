@@ -2,14 +2,17 @@
 #define SIMULATION_CLASS
 #include "types.hpp"
 #include "Background.hpp"
+#include <map>
 
 class Simulation{
-  const uchar rule;
-  const ushort width = MAX_WIDTH;
-  const ushort length = MAX_LENGTH;
-  const ushort lineStart=MAX_WIDTH;
-  const ushort lineEnd=MAX_WIDTH*2;
-  bool cell[MAX_LENGTH][MAX_WIDTH*3];
+  const uchar m_rule;
+  const ushort m_width = MAX_WIDTH;
+  const ushort m_length = MAX_LENGTH;
+  const ushort m_lineStart=MAX_WIDTH;
+  const ushort m_lineEnd=MAX_WIDTH*2;
+  bool m_cell[MAX_LENGTH][MAX_WIDTH*3];
+  //I need a map that has length & number as key and actual background as value, sad redundancy
+  
 
   static ushort calc_lineStart(const ushort);
   static ushort calc_lineEnd(const ushort);

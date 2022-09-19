@@ -4,8 +4,8 @@
 #include "Parameters.hpp"
 
 class Background:public Parameters{
-  int min;
-  bool cell[MAX_SIZE];
+  int m_min;
+  bool m_cell[MAX_SIZE];
 
   void simplify(void);
 

@@ -4,71 +4,73 @@
 #include "Background.hpp"
 #include "Simulation.hpp"
 
-ushort Simulation::calc_lineStart(const ushort width) {
-    return MAX_WIDTH + (MAX_SIZE - width)/2;
+ushort Simulation::calc_lineStart(const ushort m_width) {
+    return MAX_WIDTH + (MAX_SIZE - m_width)/2;
   }
 
-ushort Simulation::calc_lineEnd(const ushort width) {
-    return MAX_WIDTH + (MAX_SIZE + width)/2;
+ushort Simulation::calc_lineEnd(const ushort m_width) {
+    return MAX_WIDTH + (MAX_SIZE + m_width)/2;
   }
 void Simulation::clear(){
-    const int realFirstCol = lineStart - width;
-    const int realLastCol = lineEnd + width;
-    for(int row=0; row<length; ++row) for(int col=realFirstCol; col < realLastCol; ++col) cell[row][col] = 0;
+    const int realFirstCol = m_lineStart - m_width;
+    const int realLastCol = m_lineEnd + m_width;
+    for(int row=0; row<m_length; ++row) 
+      for(int col=realFirstCol; col < realLastCol; ++col) 
+        m_cell[row][col] = 0;
   }
 
 void Simulation::evolve(){
-  const int realFirstCol = lineStart - width + 1;
-  const int realLastCol = lineEnd + width - 1;
-  for(int row=1; row<length; ++row) {
+  const int realFirstCol = m_lineStart - m_width + 1;
+  const int realLastCol = m_lineEnd + m_width - 1;
+  for(int row=1; row<m_length; ++row) {
     int prevRow = row-1;
     for(int col=realFirstCol; col<realLastCol; ++col){
-      uchar val = cell[prevRow][col-1]*4+cell[prevRow][col]*2+cell[prevRow][col+1];
-      cell[row][col] = (rule >> val) & 1;
+      uchar val = m_cell[prevRow][col-1]*4+m_cell[prevRow][col]*2+m_cell[prevRow][col+1];
+      m_cell[row][col] = (m_rule >> val) & 1;
     }
   }
 }
 
 void Simulation::evolve(const uchar row){
-  const int realFirstCol = lineStart - width + 1;
-  const int realLastCol = lineEnd + width - 1;
+  const int realFirstCol = m_lineStart - m_width + 1;
+  const int realLastCol = m_lineEnd + m_width - 1;
   int prevRow = row-1;
   for(int col=realFirstCol; col<realLastCol; ++col){
-    uchar val = cell[prevRow][col-1]*4+cell[prevRow][col]*2+cell[prevRow][col+1];
-    cell[row][col] = (rule >> val) & 1;
+    uchar val = m_cell[prevRow][col-1]*4+m_cell[prevRow][col]*2+m_cell[prevRow][col+1];
+    m_cell[row][col] = (m_rule >> val) & 1;
   }
 }
 
 void Simulation::set(const uchar pos){
-  cell[0][lineStart+pos] = 1;
+  m_cell[0][m_lineStart+pos] = 1;
 }
 
 void Simulation::unset(const uchar pos){
-  cell[0][lineStart+pos] = 0;
+  m_cell[0][m_lineStart+pos] = 0;
 }
 
 void Simulation::complement(const uchar pos){
-  cell[0][lineStart+pos] = !cell[0][lineStart+pos];
+  m_cell[0][m_lineStart+pos] = !m_cell[0][m_lineStart+pos];
 }
 
 void Simulation::randomize(){
-  for(int col=lineStart; col<lineEnd; ++col){
-    cell[0][col] = rand()%2;
+  for(int col=m_lineStart; col<m_lineEnd; ++col){
+    m_cell[0][col] = rand()%2;
   }
 }
 
 Background Simulation::findBackground(const ushort row){
   bool temp[MAX_SIZE];
-  for(int len=4; len<width/4; ++len) {
-    ushort endPos = lineEnd-2*len;
-    for(int pos = lineStart; pos<endPos; ++pos) {
+  for(int len=4; len<m_width/4; ++len) {
+    ushort endPos = m_lineEnd-2*len;
+    for(int pos = m_lineStart; pos<endPos; ++pos) {
       bool backgroundPresent = true;
       for(int i=0; i<len; ++i){
-        temp[i] = cell[row][pos+i];
+        temp[i] = m_cell[row][pos+i];
       }
       for(int iter=0; iter<len; ++iter){
-        if(cell[row][pos+iter]!=cell[row][pos+len+iter] ||
-        cell[row][pos+iter]!=cell[row][pos+2*len+iter]){
+        if(m_cell[row][pos+iter]!=m_cell[row][pos+len+iter] ||
+        m_cell[row][pos+iter]!=m_cell[row][pos+2*len+iter]){
           backgroundPresent = false;
           break;
         }
@@ -85,17 +87,17 @@ Background Simulation::findBackground(const ushort row){
 bool Simulation::confirmBackground(Background bg){
   bool bgConfirmed;
   bool absConfirmed;
-  int rowLimit = length;
-  int colLimit = lineEnd - bg.length;
+  int rowLimit = m_length;
+  int colLimit = m_lineEnd - bg.m_length;
   for(int row = 1; row<rowLimit; ++row){
-    for(int col = lineStart; col < colLimit; ++col){
+    for(int col = m_lineStart; col < colLimit; ++col){
       bgConfirmed = true;
-      for(int i=0; i<bg.length; ++i) if(cell[row][col+i] != bg.cell[i]){
+      for(int i=0; i<bg.m_length; ++i) if(m_cell[row][col+i] != bg.m_cell[i]){
         bgConfirmed = false;
         break;
       } if(bgConfirmed){
-        bg.groupSpeedDisplacement = col - lineStart;
-        bg.groupSpeedTime = row;
+        bg.m_groupSpeedDisplacement = col - m_lineStart;
+        bg.m_groupSpeedTime = row;
         break;
       }
     } if(bgConfirmed){
@@ -104,38 +106,38 @@ bool Simulation::confirmBackground(Background bg){
   } if(bgConfirmed) {
     for(int row = 1; row<rowLimit; ++row){
       absConfirmed = true;
-      for(int i=0; i<bg.length; ++i) if(cell[row][lineStart+i] != bg.cell[i]){
+      for(int i=0; i<bg.m_length; ++i) if(m_cell[row][m_lineStart+i] != bg.m_cell[i]){
         absConfirmed = false;
         break;
       } if(absConfirmed){
-        bg.absoluteTime = row;
+        bg.m_absoluteTime = row;
         break;
       }
-    } std::cout << "Group speed: " << bg.groupSpeedDisplacement << "/" << bg.groupSpeedTime << "\nAbsolute time: " << bg.absoluteTime << "\n";
+    } std::cout << "Group speed: " << bg.m_groupSpeedDisplacement << "/" << bg.m_groupSpeedTime << "\nAbsolute time: " << bg.m_absoluteTime << "\n";
     return true;
   } return false;
 }
 
 void Simulation::parseBackground(const Background bg){
-  std::cout<<"bg length: "<<bg.length << "\n";
+  std::cout<<"bg m_length: "<<bg.m_length << "\n";
   std::cout<<"bg: ";
-  for(int i=0; i<bg.length; ++i){
-    if(bg.cell[i]) std::cout<<"x";
+  for(int i=0; i<bg.m_length; ++i){
+    if(bg.m_cell[i]) std::cout<<"x";
     else std::cout<<"o";
   } std::cout<<"\n";
-  int pos = lineStart;
-  int realLineEnd = lineEnd+width;
+  int pos = m_lineStart;
+  int realLineEnd = m_lineEnd+m_width;
   int bg_iter=0;
   while(pos < realLineEnd){
-    cell[0][pos++] = bg.cell[bg_iter++];
-    if(bg_iter==bg.length) bg_iter = 0;
+    m_cell[0][pos++] = bg.m_cell[bg_iter++];
+    if(bg_iter==bg.m_length) bg_iter = 0;
   }
-  pos = lineStart - 1;
-  int realLineStart = lineStart - width;
-  bg_iter = bg.length-1;
+  pos = m_lineStart - 1;
+  int realLineStart = m_lineStart - m_width;
+  bg_iter = bg.m_length-1;
   while(pos >= realLineStart){
-    cell[0][pos--] = bg.cell[bg_iter--];
-    if(bg_iter<0) bg_iter = bg.length-1;
+    m_cell[0][pos--] = bg.m_cell[bg_iter--];
+    if(bg_iter<0) bg_iter = bg.m_length-1;
   }
 }
 
@@ -149,13 +151,13 @@ Background Simulation::findParseEvolve(void){
       clear();
       randomize();
       evolve();
-      bg = findBackground(length-1);
+      bg = findBackground(m_length-1);
       std::cout << ctr++ << "\n";
       if(ctr > 100000){
         std::cout << "Too many attempts!\n";
         return bg;
       }
-    } while(bg.length == 0);
+    } while(bg.m_length == 0);
     parseBackground(bg);
     evolve();
     bgConfirmed = confirmBackground(bg);
@@ -165,30 +167,31 @@ Background Simulation::findParseEvolve(void){
 }
 
 void Simulation::findGlider(const Background bg){
-  if(bg.length == 0){
+  if(bg.m_length == 0){
     std::cout<<"Background not valid!\n";
     return;
   } parseBackground(bg);
-  for(int i=0; i<bg.length; ++i){
-    complement((width-bg.length)/2+i);
+  for(int i=0; i<bg.m_length; ++i){
+    complement((m_width-bg.m_length)/2+i);
     evolve();
     print();
-    complement((width-bg.length)/2+i);
+    complement((m_width-bg.m_length)/2+i);
   }
 }
 
 void Simulation::print(void){
-  for(int i=0; i<width; ++i) std::cout<<"=";
+  for(int i=0; i<m_width; ++i) std::cout<<"=";
   std::cout<<"\n";
-  for(int row=0; row<length; ++row){
-    for(int col=lineStart; col<lineEnd; ++col){
-      if(cell[row][col]) std::cout<<"X";
+  for(int row=0; row<m_length; ++row){
+    for(int col=m_lineStart; col<m_lineEnd; ++col){
+      if(m_cell[row][col]) std::cout<<"X";
       else std::cout<<"-";
     } std::cout<<"\n";
-  } for(int i=0; i<width; ++i) std::cout<<"=";
+  } for(int i=0; i<m_width; ++i) std::cout<<"=";
   std::cout<<std::endl;
 }
 
-Simulation::Simulation(const uchar rule):rule(rule){}
+Simulation::Simulation(const uchar m_rule):m_rule(m_rule){}
 
-Simulation::Simulation(const uchar rule, const ushort width, const ushort length):rule(rule), width(width), length(length), lineStart(calc_lineStart(width)), lineEnd(calc_lineEnd(width)){}
+Simulation::Simulation(const uchar m_rule, const ushort m_width, const ushort m_length)
+:m_rule(m_rule), m_width(m_width), m_length(m_length), m_lineStart(calc_lineStart(m_width)), m_lineEnd(calc_lineEnd(m_width)){}

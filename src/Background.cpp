@@ -3,54 +3,54 @@
 #include "Background.hpp"
 
 void Background::simplify(){
-  min = 0;
+  m_min = 0;
   int base = 1;
   bool temp[MAX_SIZE];
   bool min_cell[MAX_SIZE];
-  for(int i= length-1; i>-1; --i){
-    min += base*cell[i];
-    min_cell[i] = cell[i];
+  for(int i= m_length-1; i>-1; --i){
+    m_min += base*m_cell[i];
+    min_cell[i] = m_cell[i];
     base*=2;
-  } for(int i=1; i<length; ++i) {
+  } for(int i=1; i<m_length; ++i) {
     int current = 0;
     base = 1;
-    for(int j=length-1; j>-1; --j) {
-      temp[j] = cell[(j+i)%length];
+    for(int j=m_length-1; j>-1; --j) {
+      temp[j] = m_cell[(j+i)%m_length];
       current += base*temp[j];
       base*=2;
-    } if(current < min) {
-      min = current;
-      for(int j=0; j<length; ++j) min_cell[j] = temp[j];
+    } if(current < m_min) {
+      m_min = current;
+      for(int j=0; j<m_length; ++j) min_cell[j] = temp[j];
     }
-  } for(int i=0; i<length; ++i){
-    cell[i] = min_cell[i];
+  } for(int i=0; i<m_length; ++i){
+    m_cell[i] = min_cell[i];
   }
 }
 
 Background::Background(void){
-  length = 0;
+  m_length = 0;
 }
 
-Background::Background(const ushort length, bool* cell){
-  this->length = length;
-  for(int i=0; i<length; ++i) this->cell[i] = cell[i];
+Background::Background(const ushort m_length, bool* m_cell){
+  this->m_length = m_length;
+  for(int i=0; i<m_length; ++i) this->m_cell[i] = m_cell[i];
   simplify();
 }
 
 Background::Background(const Background& bg){
-  length = bg.length;
-  for(int i=0; i<length; ++i) cell[i] = bg.cell[i];
+  m_length = bg.m_length;
+  for(int i=0; i<m_length; ++i) m_cell[i] = bg.m_cell[i];
 }
 
 Background& Background::operator=(const Background& bg){
-  length = bg.length;
-  for(int i=0; i<length; ++i) cell[i] = bg.cell[i];
+  m_length = bg.m_length;
+  for(int i=0; i<m_length; ++i) m_cell[i] = bg.m_cell[i];
   return *this;
 }
 
 void Background::print(){
-  for(int i=0; i<length; ++i){
-    if(cell[i]) std::cout<<"x";
+  for(int i=0; i<m_length; ++i){
+    if(m_cell[i]) std::cout<<"x";
     else std::cout<<"o";
-  } std::cout << "\nmin: " << min << "\n";
+  } std::cout << "\nmin: " << m_min << "\n";
 }
