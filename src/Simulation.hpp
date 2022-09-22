@@ -2,6 +2,7 @@
 #define SIMULATION_CLASS
 #include "types.hpp"
 #include "Background.hpp"
+#include "MapKey.hpp"
 #include <map>
 
 class Simulation{
@@ -10,9 +11,8 @@ class Simulation{
   const ushort m_length = MAX_LENGTH;
   const ushort m_lineStart=MAX_WIDTH;
   const ushort m_lineEnd=MAX_WIDTH*2;
-  bool m_cell[MAX_LENGTH][MAX_WIDTH*3];
-  //I need a map that has length & number as key and actual background as value, sad redundancy
-  
+  bool m_cell[MAX_LENGTH][MAX_WIDTH*3];  
+  std::map<MapKey, Background> m_bgMap;
 
   static ushort calc_lineStart(const ushort);
   static ushort calc_lineEnd(const ushort);
@@ -33,6 +33,7 @@ public:
   void findGlider(const Background);
 
   void print(void);
+  void printBackgroundMap(void);
 
   Simulation(const uchar);
   Simulation(const uchar, const ushort, const ushort);

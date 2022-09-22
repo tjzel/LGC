@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include "types.hpp"
+#include "MapKey.hpp"
 #include "Background.hpp"
 #include "Simulation.hpp"
 
@@ -142,7 +143,6 @@ void Simulation::parseBackground(const Background bg){
 }
 
 Background Simulation::findParseEvolve(void){
-  srand(time(NULL));
   Background bg;
   int ctr = 0;
   bool bgConfirmed = false;
@@ -162,6 +162,9 @@ Background Simulation::findParseEvolve(void){
     evolve();
     bgConfirmed = confirmBackground(bg);
   } std::cout << "Background confirmed!\n";
+  int size = m_bgMap.size();
+  m_bgMap.try_emplace(MapKey(bg), bg);
+  if(m_bgMap.size() == size) std::cout << "Background already present!\n";
   print();
   return bg;
 }
@@ -176,6 +179,7 @@ void Simulation::findGlider(const Background bg){
     evolve();
     print();
     complement((m_width-bg.m_length)/2+i);
+    //here
   }
 }
 
@@ -191,7 +195,18 @@ void Simulation::print(void){
   std::cout<<std::endl;
 }
 
-Simulation::Simulation(const uchar m_rule):m_rule(m_rule){}
+void Simulation::printBackgroundMap(void){
+  std::cout<<"Printing backgrounds, size: " << m_bgMap.size() << "\n";
+  for(auto it = m_bgMap.begin(); it != m_bgMap.end(); ++it){
+    it->second.print();
+  } std::cout<<"\n";
+}
+
+Simulation::Simulation(const uchar m_rule):m_rule(m_rule){
+    srand(time(NULL));
+}
 
 Simulation::Simulation(const uchar m_rule, const ushort m_width, const ushort m_length)
-:m_rule(m_rule), m_width(m_width), m_length(m_length), m_lineStart(calc_lineStart(m_width)), m_lineEnd(calc_lineEnd(m_width)){}
+:m_rule(m_rule), m_width(m_width), m_length(m_length), m_lineStart(calc_lineStart(m_width)), m_lineEnd(calc_lineEnd(m_width)){
+    srand(time(NULL));
+}

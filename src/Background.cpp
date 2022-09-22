@@ -39,18 +39,35 @@ Background::Background(const ushort m_length, bool* m_cell){
 
 Background::Background(const Background& bg){
   m_length = bg.m_length;
+  m_min = bg.m_min;
   for(int i=0; i<m_length; ++i) m_cell[i] = bg.m_cell[i];
 }
 
 Background& Background::operator=(const Background& bg){
   m_length = bg.m_length;
+  m_min = bg.m_min;
   for(int i=0; i<m_length; ++i) m_cell[i] = bg.m_cell[i];
   return *this;
+}
+
+const bool Background::operator<(const Background& bg){
+  if(this->m_length < bg.m_length || (this->m_length == bg.m_length && this->m_min < bg.m_min)) return true;
+  return false;
+}
+
+const bool Background::operator>(const Background& bg){
+    if(this->m_length > bg.m_length || (this->m_length == bg.m_length && this->m_min > bg.m_min)) return true;
+  return false;
+}
+
+const bool Background::operator==(const Background& bg){
+  if(this->m_length == bg.m_length && this->m_min == bg.m_min) return true;
+  return false;
 }
 
 void Background::print(){
   for(int i=0; i<m_length; ++i){
     if(m_cell[i]) std::cout<<"x";
     else std::cout<<"o";
-  } std::cout << "\nmin: " << m_min << "\n";
+  } std::cout << "\nmin: " << m_min << "\nlength: " << m_length << "\n";
 }
