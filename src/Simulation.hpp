@@ -35,6 +35,8 @@ public:
   void print(void);
   void printBackgroundMap(void);
 
+  int amountOfBackgrounds(void) const;
+
   Simulation(const uchar);
   Simulation(const uchar, const ushort, const ushort);
 

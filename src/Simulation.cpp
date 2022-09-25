@@ -166,8 +166,8 @@ Background Simulation::findParseEvolve(void){
   } //std::cout << "Background confirmed!\n";
   int size = m_bgMap.size();
   m_bgMap.try_emplace(MapKey(bg), bg);
-  if(m_bgMap.size() == size) std::cout << "Background already present!\n";
-  print();
+  //if(m_bgMap.size() == size) std::cout << "Background already present!\n";
+  //print();
   return bg;
 }
 
@@ -201,7 +201,12 @@ void Simulation::printBackgroundMap(void){
   std::cout<<"Printing backgrounds, size: " << m_bgMap.size() << "\n";
   for(auto it = m_bgMap.begin(); it != m_bgMap.end(); ++it){
     it->second.print();
+    std::cout<<"\n";
   } std::cout<<"\n";
+}
+
+int Simulation::amountOfBackgrounds(void) const{
+  return m_bgMap.size();
 }
 
 Simulation::Simulation(const uchar m_rule):m_rule(m_rule){

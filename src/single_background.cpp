@@ -16,6 +16,7 @@ int main(int argv, char* argc[]){
   }
   Simulation sim(rule, width, length);
   Background bg = sim.findParseEvolve();
+  sim.print();
   bg.print();
   return 0;
 }

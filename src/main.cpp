@@ -15,9 +15,17 @@ int main(int argv, char* argc[]){
     std::cout << "Rule out of bounds!\n";
     return 2;
   } Simulation sim(rule, width, length);
-  for(int i=0; i<32; ++i){
+  int attempts = 0;
+  int currentAmount = 0;
+  while(currentAmount < 32) {
     sim.findParseEvolve();
-    sim.printBackgroundMap();
+    if(currentAmount < sim.amountOfBackgrounds()){
+      ++currentAmount;
+      attempts = 0;
+    } else ++attempts;
+    if(attempts == 10000) break;
+    //sim.printBackgroundMap();
   }
+  sim.printBackgroundMap();
   return 0;
 }

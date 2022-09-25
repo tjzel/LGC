@@ -37,9 +37,7 @@ Background::Background(const ushort m_length, bool* m_cell){
   simplify();
 }
 
-Background::Background(const Background& bg){
-  m_length = bg.m_length;
-  m_min = bg.m_min;
+Background::Background(const Background& bg) : Parameters(bg){
   for(int i=0; i<m_length; ++i) m_cell[i] = bg.m_cell[i];
 }
 
