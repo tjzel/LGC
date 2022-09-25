@@ -44,30 +44,30 @@ Background::Background(const Background& bg){
 }
 
 Background& Background::operator=(const Background& bg){
-  m_length = bg.m_length;
-  m_min = bg.m_min;
+  Parameters::operator=(bg);
   for(int i=0; i<m_length; ++i) m_cell[i] = bg.m_cell[i];
   return *this;
 }
 
-const bool Background::operator<(const Background& bg){
+bool Background::operator<(const Background& bg) const{
   if(this->m_length < bg.m_length || (this->m_length == bg.m_length && this->m_min < bg.m_min)) return true;
   return false;
 }
 
-const bool Background::operator>(const Background& bg){
+bool Background::operator>(const Background& bg) const{
     if(this->m_length > bg.m_length || (this->m_length == bg.m_length && this->m_min > bg.m_min)) return true;
   return false;
 }
 
-const bool Background::operator==(const Background& bg){
+bool Background::operator==(const Background& bg) const{
   if(this->m_length == bg.m_length && this->m_min == bg.m_min) return true;
   return false;
 }
 
-void Background::print(){
+void Background::print(void) const{
   for(int i=0; i<m_length; ++i){
     if(m_cell[i]) std::cout<<"x";
     else std::cout<<"o";
-  } std::cout << "\nmin: " << m_min << "\nlength: " << m_length << "\n";
+  } std::cout << "\nMinimal value: " << m_min << "\nLength: " << m_length << "\n";
+  std::cout << "Phase velocity: " << m_phaseVelocityDisplacement << "/" << m_phaseVelocityTime << "\nAbsolute time: " << m_absoluteTime << "\n";
 }

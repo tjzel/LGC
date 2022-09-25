@@ -77,7 +77,7 @@ Background Simulation::findBackground(const ushort row){
         }
       }
       if(backgroundPresent) {
-        std::cout<<"Background found!\n";
+        //std::cout<<"Background found!\n";
         return Background(len, temp);
       }
     }
@@ -85,7 +85,7 @@ Background Simulation::findBackground(const ushort row){
   return Background();
 }
 
-bool Simulation::confirmBackground(Background bg){
+bool Simulation::confirmBackground(Background& bg){
   bool bgConfirmed;
   bool absConfirmed;
   int rowLimit = m_length;
@@ -97,8 +97,10 @@ bool Simulation::confirmBackground(Background bg){
         bgConfirmed = false;
         break;
       } if(bgConfirmed){
-        bg.m_groupSpeedDisplacement = col - m_lineStart;
-        bg.m_groupSpeedTime = row;
+        bg.m_phaseVelocityDisplacement = col - m_lineStart;
+        bg.m_phaseVelocityTime = row;
+        //to find out whether background is actually travelling the opposite direction
+        //if(bg.m_groupSpeedDisplacement > bg.m_groupSpeedTime) bg.m_groupSpeedDisplacement =  - bg.m_length - bg.m_groupSpeedDisplacement;
         break;
       }
     } if(bgConfirmed){
@@ -114,18 +116,18 @@ bool Simulation::confirmBackground(Background bg){
         bg.m_absoluteTime = row;
         break;
       }
-    } std::cout << "Group speed: " << bg.m_groupSpeedDisplacement << "/" << bg.m_groupSpeedTime << "\nAbsolute time: " << bg.m_absoluteTime << "\n";
+    } //std::cout << "Group speed: " << bg.m_phaseVelocityDisplacement << "/" << bg.m_phaseVelocityTime << "\nAbsolute time: " << bg.m_absoluteTime << "\n";
     return true;
   } return false;
 }
 
 void Simulation::parseBackground(const Background bg){
-  std::cout<<"bg m_length: "<<bg.m_length << "\n";
-  std::cout<<"bg: ";
-  for(int i=0; i<bg.m_length; ++i){
-    if(bg.m_cell[i]) std::cout<<"x";
-    else std::cout<<"o";
-  } std::cout<<"\n";
+  //std::cout<<"bg m_length: "<<bg.m_length << "\n";
+  //std::cout<<"bg: ";
+  //for(int i=0; i<bg.m_length; ++i){
+  //  if(bg.m_cell[i]) std::cout<<"x";
+  //  else std::cout<<"o";
+  //} std::cout<<"\n";
   int pos = m_lineStart;
   int realLineEnd = m_lineEnd+m_width;
   int bg_iter=0;
@@ -152,7 +154,7 @@ Background Simulation::findParseEvolve(void){
       randomize();
       evolve();
       bg = findBackground(m_length-1);
-      std::cout << ctr++ << "\n";
+      //std::cout << ctr++ << "\n";
       if(ctr > 100000){
         std::cout << "Too many attempts!\n";
         return bg;
@@ -161,7 +163,7 @@ Background Simulation::findParseEvolve(void){
     parseBackground(bg);
     evolve();
     bgConfirmed = confirmBackground(bg);
-  } std::cout << "Background confirmed!\n";
+  } //std::cout << "Background confirmed!\n";
   int size = m_bgMap.size();
   m_bgMap.try_emplace(MapKey(bg), bg);
   if(m_bgMap.size() == size) std::cout << "Background already present!\n";

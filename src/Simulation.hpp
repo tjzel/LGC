@@ -28,7 +28,7 @@ public:
 
   Background findBackground(const ushort);
   void parseBackground(const Background);
-  bool confirmBackground(Background);
+  bool confirmBackground(Background&);
   Background findParseEvolve(void);
   void findGlider(const Background);
 

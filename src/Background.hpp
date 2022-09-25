@@ -4,8 +4,6 @@
 #include "Parameters.hpp"
 
 class Background:public Parameters{
-  int m_min;
-  int m_length;
   bool m_cell[MAX_SIZE];
 
   void simplify(void);
@@ -15,11 +13,11 @@ public:
   Background(const ushort, bool*);
   Background(const Background&);
   Background& operator=(const Background&);
-  const bool operator>(const Background&);
-  const bool operator<(const Background&);
-  const bool operator==(const Background&);
+  bool operator>(const Background&) const;
+  bool operator<(const Background&) const;
+  bool operator==(const Background&) const;
 
-  void print(void);
+  void print(void) const;
 
   friend class Simulation;
   friend class MapKey;
