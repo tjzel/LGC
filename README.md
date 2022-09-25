@@ -5,7 +5,7 @@ Read LGC.ipynb for more information about the project.
 
 To compile the program, while in `/build` directory run `cmake .`, then follow with `cmake build .`.
 
-This will create three programs in the `/bin` directory - one named `Rules`, `Background` and `LGC`.
+This will create three programs in the `/bin` directory - `Rules`, `Background` and `LGC`.
 
 `Rules` is a preview of all the rules that can be applied to the simulation.
 
